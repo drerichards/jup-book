@@ -7,27 +7,28 @@ const fileCache = localForage.createInstance({
 });
 
 export const fetchPlugin = (inputCode: string) => {
+  // intercepts loading of modules from file system (which doesn't exist in the browser where this loads) per index.js require statements and provides the needed object instead
   return {
     name: "fetch-plugin",
     setup(build: esbuild.PluginBuild) {
-      // runs in case the package has not been required in
-      // intercepts loading of modules from file system (which doesn't exist in the browser where this loads) per index.js require statements and provides the below object instead
-      build.onLoad({ filter: /(^index\.js$)/ }, () => {
-        return {
-          loader: "jsx", // all fetched files are processed as the included extension
-          contents: inputCode,
-        };
-      });
-
-      build.onLoad({ filter: /.css$/ }, async (args: any) => {
+      // args.path is the full path of the file to be fetched
+      build.onLoad({ filter: /.*/ }, async (args: any) => {
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
           args.path
         );
         if (cachedResult) {
           return cachedResult;
         }
+      });
 
-        // args.path is the full path of the file to be fetched
+      build.onLoad({ filter: /(^index\.js$)/ }, () => {
+        return {
+          loader: "jsx", // all fetched files are processed as this extension
+          contents: inputCode,
+        };
+      });
+
+      build.onLoad({ filter: /.css$/ }, async (args: any) => {
         const { data, request } = await axios.get(args.path);
         const escaped = data
           .replace(/\n/g, "")
@@ -49,13 +50,6 @@ export const fetchPlugin = (inputCode: string) => {
       });
 
       build.onLoad({ filter: /.*/ }, async (args: any) => {
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        );
-        if (cachedResult) {
-          return cachedResult;
-        }
-
         const { data, request } = await axios.get(args.path);
 
         const result: esbuild.OnLoadResult = {
