@@ -10,29 +10,27 @@ export const unpkgPathPlugin = (inputCode: string) => {
   return {
     name: "unpkg-path-plugin",
     setup(build: esbuild.PluginBuild) {
-      // resolve is called when esbuild is trying to find path to a specific module
+      // esbuild handles root entry to index.js path
+      build.onResolve({ filter: /(^index\.js$)/ }, () => {
+        return { path: "index.js", namespace: "a" };
+      });
+
+      // esbuild handles relative module or path in a module, ie: args.path.includes("./") || ("../")
+      build.onResolve({ filter: /^\.+\// }, async (args: any) => {
+        return {
+          namespace: "a",
+          path: new URL(args.path, `https://unpkg.com${args.resolveDir}/`).href,
+        };
+      });
+
+      // esbuild handles main file of the module
       build.onResolve({ filter: /.*/ }, async (args: any) => {
-        console.log("onResolve", args);
-        if (args.path === "index.js") {
-          return { path: args.path, namespace: "a" };
-        }
-
-        if (args.path.includes("./") || args.path.includes("../")) {
-          return {
-            namespace: "a",
-            path: new URL(args.path, `https://unpkg.com${args.resolveDir}/`)
-              .href,
-          };
-        }
-
         return {
           namespace: "a",
           path: `https://unpkg.com/${args.path}`,
         };
       });
 
-      // const a = 1;
-      // console.log(a);
       build.onLoad({ filter: /.*/ }, async (args: any) => {
         console.log("onLoad", args);
         if (args.path === "index.js") {
