@@ -6,7 +6,7 @@ const fileCache = localForage.createInstance({
   name: "filecache",
 });
 
-export const unpkgPathPlugin = () => {
+export const unpkgPathPlugin = (inputCode: string) => {
   return {
     name: "unpkg-path-plugin",
     setup(build: esbuild.PluginBuild) {
@@ -31,16 +31,16 @@ export const unpkgPathPlugin = () => {
         };
       });
 
+      // const a = 1;
+      // console.log(a);
       build.onLoad({ filter: /.*/ }, async (args: any) => {
         console.log("onLoad", args);
         if (args.path === "index.js") {
           // runs in case the package has not been required in
+          // intercepts loading of modules from file system (which doesn't exist in the browser where this loads) per index.js require statements and provides the below object instead
           return {
             loader: "jsx",
-            contents: `
-              import React, {useState} from 'react-select';
-              console.log(React, useState);
-            `,
+            contents: inputCode,
           };
         }
 

@@ -5,6 +5,7 @@ import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 
 const App = () => {
   const ref = useRef<any>(null);
+  // input is the user input that we need to bundle in order to know what to load in for the code output
   const [input, setInput] = useState("");
   const [code, setCode] = useState("");
 
@@ -32,7 +33,7 @@ const App = () => {
       entryPoints: ["index.js"],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [unpkgPathPlugin(input)],
       //   wherever 'process.env.NODE_ENV' is found, replace it with "production"
       define: {
         "process.env.NODE_ENV": '"production"',
