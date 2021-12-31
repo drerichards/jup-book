@@ -1,5 +1,7 @@
 import * as esbuild from "esbuild-wasm";
 
+// unpkg.com is a fast, global content delivery network for everything on npm
+
 export const unpkgPathPlugin = () => {
   return {
     name: "unpkg-path-plugin",
