@@ -1,5 +1,10 @@
 import * as esbuild from "esbuild-wasm";
 import axios from "axios";
+import localForage from "localforage";
+
+const fileCache = localForage.createInstance({
+  name: "filecache",
+});
 
 export const unpkgPathPlugin = () => {
   return {
@@ -13,7 +18,6 @@ export const unpkgPathPlugin = () => {
         }
 
         if (args.path.includes("./") || args.path.includes("../")) {
-          console.log("args.resolveDir ", args.resolveDir);
           return {
             namespace: "a",
             path: new URL(args.path, `https://unpkg.com${args.resolveDir}/`)
@@ -34,24 +38,28 @@ export const unpkgPathPlugin = () => {
           return {
             loader: "jsx",
             contents: `
-              const message = require('react');
-              console.log(message);
+              import React, {useState} from 'react-select';
+              console.log(React, useState);
             `,
           };
         }
+
+        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
+          args.path
+        );
+        if (cachedResult) {
+          return cachedResult;
+        }
+
         const { data, request } = await axios.get(args.path);
-        return {
+        const result: esbuild.OnLoadResult = {
           loader: "jsx",
           contents: data,
           resolveDir: new URL("./", request.responseURL).pathname,
         };
+        await fileCache.setItem(args.path, result);
+        return result;
       });
     },
   };
 };
-
-// 1. esbuild bundles index.js
-// 2. unpkgPathPlugin takes the bundle build as args
-// 3. onResolve and onLoad are promises
-// 4. onLoad checks if the path supplied is index.js. if so, it requires in the message content via esbuild parsing
-// 5. then onResolve runs and returns { path: 'medium-test-pkg', importer: "index.js" }. importer = who is trying to import the package
