@@ -6,6 +6,7 @@ import { fetchPlugin } from "./plugins/fetch-plugin";
 
 const App = () => {
   const ref = useRef<any>(null);
+  const iframe = useRef<any>(null);
   // input is the user input that we need to bundle in order to know what to load in for the code output
   const [input, setInput] = useState("");
   const [code, setCode] = useState("");
@@ -42,14 +43,23 @@ const App = () => {
       },
     });
 
-    setCode(result.outputFiles[0].text);
+    // setCode(result.outputFiles[0].text);
+    iframe.current.contentWindow.postMessage(result.outputFiles[0].text, "*");
   };
 
   const html = `
-  <script>
-    ${code}
-  </script>
-`;
+    <html lang="en">
+      <head></head>
+      <body>
+        <div id="root"></div>
+        <script>
+          window.addEventListener("message", (event) => {
+            eval(event.data);
+          }, false);
+        </script>
+      </body>
+    </html>
+  `;
 
   return (
     <div>
@@ -62,6 +72,7 @@ const App = () => {
       </div>
       <pre>{code}</pre>
       <iframe
+        ref={iframe}
         title="User-generated code output window"
         srcDoc={html}
         sandbox="allow-scripts"
