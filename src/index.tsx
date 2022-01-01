@@ -45,6 +45,12 @@ const App = () => {
     setCode(result.outputFiles[0].text);
   };
 
+  const html = `
+  <script>
+    ${code}
+  </script>
+`;
+
   return (
     <div>
       <textarea
@@ -55,6 +61,11 @@ const App = () => {
         <button onClick={onClickHandler}>Submit</button>
       </div>
       <pre>{code}</pre>
+      <iframe
+        title="User-generated code output window"
+        srcDoc={html}
+        sandbox="allow-scripts"
+      />
     </div>
   );
 };
