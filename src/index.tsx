@@ -1,3 +1,4 @@
+import "bulmaswatch/superhero/bulmaswatch.min.css";
 import * as esbuild from "esbuild-wasm";
 import { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
@@ -81,7 +82,12 @@ const App = () => {
         onChange={(e) => setInput(e.target.value)}
       ></textarea>
       <div>
-        <button onClick={onClickHandler}>Submit</button>
+        <button
+          className="button button-format is-primary is-small"
+          onClick={onClickHandler}
+        >
+          Submit
+        </button>
       </div>
       <iframe
         ref={iframe}
