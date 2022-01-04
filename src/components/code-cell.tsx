@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CodeEditor from "./code-editor";
-import Preview from "./preview";
-import Resizable from "./resizable-box";
+import PreviewFrame from "./preview-frame";
+import ResizableFrame from "./resizable-frame";
 import bundle from "../bundler";
 
 const CodeCell = () => {
@@ -15,23 +15,15 @@ const CodeCell = () => {
   };
 
   return (
-    <Resizable direction="vertical">
-      <>
+    <ResizableFrame direction="vertical">
+      <div style={{ height: "100%", display: "flex", flexDirection: "row" }}>
         <CodeEditor
           initialValue={`const a = 1;\nconsole.log(a);`}
           onChange={(value) => setInput(value)}
         />
-        <div>
-          <button
-            className="button button-format is-primary is-small"
-            onClick={onClickHandler}
-          >
-            Submit
-          </button>
-        </div>
-        <Preview code={code} />
-      </>
-    </Resizable>
+        <PreviewFrame code={code} />
+      </div>
+    </ResizableFrame>
   );
 };
 

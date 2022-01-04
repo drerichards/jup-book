@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
-interface PreviewProps {
+interface PreviewFrameProps {
   code: string;
 }
 
+// default startup code for code editor
 const html = `
     <html lang="en">
       <head></head>
@@ -23,7 +24,7 @@ const html = `
     </html>
   `;
 
-const Preview: React.FC<PreviewProps> = ({ code }) => {
+const PreviewFrame: React.FC<PreviewFrameProps> = ({ code }) => {
   const iframe = useRef<any>(null);
   useEffect(() => {
     // ensures before each code output display, refresh html code just in case user deletes
@@ -32,13 +33,16 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
   }, [code]);
 
   return (
-    <iframe
-      ref={iframe}
-      title="User-generated code output window"
-      srcDoc={html}
-      sandbox="allow-scripts"
-    />
+    <div className="preview-wrapper">
+      <iframe
+        style={{ backgroundColor: "#fff" }}
+        ref={iframe}
+        title="User-generated code output window"
+        srcDoc={html}
+        sandbox="allow-scripts"
+      />
+    </div>
   );
 };
 
-export default Preview;
+export default PreviewFrame;
