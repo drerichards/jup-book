@@ -30,9 +30,7 @@ const ResizableFrame: React.FC<ResizableFrameProps> = ({
     };
     window.addEventListener("resize", listener);
 
-    return () => {
-      window.removeEventListener("resize", listener);
-    };
+    return () => window.removeEventListener("resize", listener);
   }, [width]);
 
   let resizableProps: ResizableBoxProps = {

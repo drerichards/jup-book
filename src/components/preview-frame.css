@@ -23,3 +23,10 @@
 .react-draggable-transparent-selection iframe {
     pointer-events: none;
 }
+
+.preview-error {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: red;
+}

@@ -3,6 +3,7 @@ import "./preview-frame.css";
 
 interface PreviewFrameProps {
   code: string;
+  errorMessage: string;
 }
 
 // default startup code for code editor
@@ -12,13 +13,20 @@ const html = `
       <body>
         <div id="root"></div>
         <script>
+          const handleError = (err) => {
+            const root = document.querySelector("#root");
+            root.innerHTML = '<div style="color: red;"}}><h4>Runtime Error</h4>' + err + '</div>'
+            console.error(err);
+          };
+          window.addEventListener("error", (event) => {
+            event.preventDefault();
+            handleError(event.error);
+          });
           window.addEventListener("message", (event) => {
             try {
               eval(event.data);
-            } catch (err) {
-              const root = document.querySelector("#root");
-              root.innerHTML = '<div style="color: red;"}}><h4>Runtime Error</h4>' + err + '</div>'
-              console.error(err);
+            } catch (error) {
+              handleError(error);
             }
           }, false);
         </script>
@@ -26,13 +34,17 @@ const html = `
     </html>
   `;
 
-const PreviewFrame: React.FC<PreviewFrameProps> = ({ code }) => {
+const PreviewFrame: React.FC<PreviewFrameProps> = ({ code, errorMessage }) => {
   const iframe = useRef<any>(null);
   useEffect(() => {
     // ensures before each code output display, refresh html code just in case user deletes
     iframe.current.srcdoc = html;
-    iframe.current.contentWindow.postMessage(code, "*");
+    setTimeout(() => {
+      iframe.current.contentWindow.postMessage(code, "*");
+    }, 50);
   }, [code]);
+
+  console.log({ errorMessage });
 
   return (
     <div className="preview-wrapper">
@@ -42,6 +54,15 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({ code }) => {
         srcDoc={html}
         sandbox="allow-scripts"
       />
+      {errorMessage && (
+        <div className="preview-error">
+          <div>
+            <h4>Runtime Error</h4>
+            <br />
+            {errorMessage}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
