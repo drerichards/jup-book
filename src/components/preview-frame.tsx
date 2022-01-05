@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import "./preview-frame.css";
+
 interface PreviewFrameProps {
   code: string;
 }
@@ -35,7 +37,6 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({ code }) => {
   return (
     <div className="preview-wrapper">
       <iframe
-        style={{ backgroundColor: "#fff" }}
         ref={iframe}
         title="User-generated code output window"
         srcDoc={html}
