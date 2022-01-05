@@ -12,6 +12,7 @@ const ResizableFrame: React.FC<ResizableFrameProps> = ({
 }) => {
   const [innerHeight, setInnerHeight] = useState(window.innerHeight);
   const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(window.innerWidth * 0.75);
 
   useEffect(() => {
     let timer: any;
@@ -22,6 +23,9 @@ const ResizableFrame: React.FC<ResizableFrameProps> = ({
       timer = setTimeout(() => {
         setInnerHeight(window.innerHeight);
         setInnerWidth(window.innerWidth);
+        if (window.innerWidth * 0.75 < width) {
+          // window will remain above 75% so that it doesnt disappear when resizing
+        }
       }, 100);
     };
     window.addEventListener("resize", listener);
@@ -29,7 +33,7 @@ const ResizableFrame: React.FC<ResizableFrameProps> = ({
     return () => {
       window.removeEventListener("resize", listener);
     };
-  }, []);
+  }, [width]);
 
   let resizableProps: ResizableBoxProps = {
     // vertical case
@@ -44,10 +48,14 @@ const ResizableFrame: React.FC<ResizableFrameProps> = ({
     resizableProps = {
       className: "resize-horizontal",
       height: Infinity,
-      width: innerWidth * 0.75,
+      width,
       minConstraints: [innerWidth * 0.2, Infinity],
       maxConstraints: [innerWidth * 0.75, Infinity],
       resizeHandles: ["e"],
+      onResizeStop: (e, data) => {
+        // event when user stops dragging window
+        setWidth(data.size.width);
+      },
     };
   }
 
