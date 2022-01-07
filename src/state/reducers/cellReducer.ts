@@ -19,7 +19,7 @@ const initialState: CellState = {
   data: {},
 };
 
-const randomIDGen = (): string => Math.random().toString(36).substring(2, 5);
+const randomIDGen = (): string => Math.random().toString(36).substring(2, 7);
 
 const reducer = produce(
   (state: CellState = initialState, action: Action): CellState | void => {
@@ -33,18 +33,18 @@ const reducer = produce(
         if (targetIndex < 0 || targetIndex > state.order.length - 1) return;
         state.order[moveIndex] = state.order[targetIndex];
         state.order[targetIndex] = action.payload.id;
-        return;
+        return state;
 
       case ActionType.DELETE_CELL:
         delete state.data[action.payload];
         // filter out order ids that = payload id and return new array
         state.order = state.order.filter((id) => id !== action.payload);
-        return;
+        return state;
 
       case ActionType.UPDATE_CELL:
         const { id, content } = action.payload;
         state.data[id].content = content;
-        return;
+        return state;
 
       case ActionType.INSERT_CELL_BEFORE:
         const { type } = action.payload;
@@ -64,7 +64,7 @@ const reducer = produce(
         } else {
           state.order.splice(insertIndex, 0, cell.id); // adds new cell before given id
         }
-        return;
+        return state;
 
       default:
         return state;
