@@ -6,7 +6,7 @@ import { Cell } from "../cell";
 interface CellState {
   loading: boolean;
   error: string | null;
-  order: string[]; // ids in order
+  order: string[]; // ids in order of how they should be displayed
   data: {
     [key: string]: Cell; // key is the cell's own ID. value is the cell itself
   };
@@ -22,7 +22,7 @@ const initialState: CellState = {
 const randomIDGen = (): string => Math.random().toString(36).substring(2, 7);
 
 const reducer = produce(
-  (state: CellState = initialState, action: Action): CellState | void => {
+  (state: CellState = initialState, action: Action): CellState => {
     switch (action.type) {
       case ActionType.MOVE_CELL:
         const { direction } = action.payload;
@@ -30,7 +30,8 @@ const reducer = produce(
           (id) => id === action.payload.id
         );
         const targetIndex = direction === "up" ? moveIndex - 1 : moveIndex + 1;
-        if (targetIndex < 0 || targetIndex > state.order.length - 1) return;
+        if (targetIndex < 0 || targetIndex > state.order.length - 1)
+          return state;
         state.order[moveIndex] = state.order[targetIndex];
         state.order[targetIndex] = action.payload.id;
         return state;
