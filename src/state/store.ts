@@ -5,22 +5,22 @@ import reducers from "./reducers";
 
 export const store = createStore(reducers, {}, applyMiddleware(thunk));
 
-// for (let i = 0; i < 1; i++) {
-//   store.dispatch({
-//     type: ActionType.INSERT_CELL_BEFORE,
-//     payload: {
-//       id: null,
-//       type: "text",
-//     },
-//   });
+for (let i = 0; i < 1; i++) {
+  store.dispatch({
+    type: ActionType.INSERT_CELL_AFTER,
+    payload: {
+      id: null,
+      type: "text",
+    },
+  });
 
-//   store.dispatch({
-//     type: ActionType.INSERT_CELL_BEFORE,
-//     payload: {
-//       id: null,
-//       type: "code",
-//     },
-//   });
-// }
+  store.dispatch({
+    type: ActionType.INSERT_CELL_AFTER,
+    payload: {
+      id: null,
+      type: "code",
+    },
+  });
+}
 
 // console.log(store.getState());

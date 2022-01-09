@@ -12,18 +12,18 @@ const CellList: FC = () => {
   });
   const renderedCells = cells.map((cell) => (
     <Fragment key={cell.id}>
-      <AddCell nextCellId={cell.id} />
       <CellListItem key={cell.id} cell={cell} />
+      <AddCell prevCellId={cell.id} />
     </Fragment>
   ));
 
   return (
     <div>
-      {renderedCells}
       <AddCell
-        nextCellId={null}
+        prevCellId={null}
         forceVisible={cells.length === 0 ? true : false}
       />
+      {renderedCells}
     </div>
   );
 };

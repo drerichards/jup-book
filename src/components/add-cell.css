@@ -5,6 +5,11 @@
     transition: opacity 0.3s ease-in 0.22s;
 }
 
+.add-cell:active {
+    opacity: 0 !important;
+    transition: opacity 0s;
+}
+
 .add-cell:hover {
     opacity: 1;
 }
