@@ -47,7 +47,7 @@ const reducer = produce(
         state.data[id].content = content;
         return state;
 
-      case ActionType.INSERT_CELL_BEFORE:
+      case ActionType.INSERT_CELL_AFTER:
         const { type } = action.payload;
         const cell: Cell = {
           id: randomIDGen(),
@@ -61,9 +61,9 @@ const reducer = produce(
           (id) => id === action.payload.id
         );
         if (insertIndex === -1) {
-          state.order.push(cell.id); // pushes cell to end of order arr if no id match
+          state.order.unshift(cell.id); // pushes cell to start of order arr if no id match
         } else {
-          state.order.splice(insertIndex, 0, cell.id); // adds new cell before given id
+          state.order.splice(insertIndex + 1, 0, cell.id); // adds new cell after given id
         }
         return state;
 

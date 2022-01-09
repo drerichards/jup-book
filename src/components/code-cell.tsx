@@ -30,7 +30,13 @@ const CodeCell: FC<CodeCellProps> = ({ cell }) => {
 
   return (
     <ResizableFrame direction="vertical">
-      <div style={{ height: "100%", display: "flex", flexDirection: "row" }}>
+      <div
+        style={{
+          height: "calc(100% - 10px)",
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
         <ResizableFrame direction="horizontal">
           <CodeEditor
             initialValue={cell.content}

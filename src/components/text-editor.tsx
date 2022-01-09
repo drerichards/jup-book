@@ -17,10 +17,8 @@ const TextEditor: FC<TextEditorProps> = ({ cell }) => {
   useEffect(() => {
     const listener = (e: MouseEvent) => {
       if (ref.current && e.target && ref.current.contains(e.target as Node)) {
-        console.log("elem clicked in editor");
         return;
       }
-      console.log("elem clicked NOT in editor");
       setEditing(false);
     };
     document.addEventListener("click", listener, { capture: true });

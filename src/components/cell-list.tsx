@@ -20,7 +20,10 @@ const CellList: FC = () => {
   return (
     <div>
       {renderedCells}
-      <AddCell nextCellId={null} />
+      <AddCell
+        nextCellId={null}
+        forceVisible={cells.length === 0 ? true : false}
+      />
     </div>
   );
 };
