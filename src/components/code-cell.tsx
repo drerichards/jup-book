@@ -19,7 +19,7 @@ const CodeCell: FC<CodeCellProps> = ({ cell }) => {
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      // bundles the typed code after 1 sec at a time
+      // bundles the typed code after 1.2 sec at a time
       const output = await bundle(cell.content);
       setCode(output.code);
       setError(output.error);
