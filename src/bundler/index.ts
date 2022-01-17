@@ -26,6 +26,8 @@ const bundle = async (rawCode: string) => {
         "process.env.NODE_ENV": '"production"',
         global: "window",
       },
+      jsxFactory: "_React.createElement", // allows aliasing of import if user already imports in code cell
+      jsxFragment: "_React.Fragment",
     });
 
     return { code: result.outputFiles[0].text, error: "" };
