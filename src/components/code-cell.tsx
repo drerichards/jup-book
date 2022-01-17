@@ -15,13 +15,25 @@ const CodeCell: FC<CodeCellProps> = ({ cell }) => {
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
 
   useEffect(() => {
+    const runBundler = (id: string, content: string) => {
+      createBundle(id, content);
+    };
+
+    if (!bundle) {
+      // exec bundle creation on first load
+      runBundler(cell.id, cell.content);
+      return;
+    }
+
     const timer = setTimeout(async () => {
       // bundles the typed code after 1.2 sec at a time
-      createBundle(cell.id, cell.content);
+      runBundler(cell.id, cell.content);
     }, 1200);
 
     return () => clearTimeout(timer);
-  }, [cell.id, cell.content]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // bundle dep would create inf loop
+  }, [cell.id, cell.content, createBundle]);
 
   return (
     <ResizableFrame direction="vertical">
