@@ -3,18 +3,21 @@ import { ActionType } from "../action-types";
 import { Action } from "../actions";
 
 interface BundleState {
-  [key: string]: {
-    // id of cell
-    loading: boolean;
-    code: string;
-    err: string;
-  };
+  [key: string]:
+    | {
+        loading: boolean;
+        code: string;
+        error: string;
+      }
+    | undefined;
 }
 
 const initialState: BundleState = {
-  //   loading: false,
-  //   code: "",
-  //   error: "",
+  id: {
+    loading: false,
+    code: "",
+    error: "",
+  },
 };
 
 const reducer = produce(
@@ -24,7 +27,7 @@ const reducer = produce(
         state[action.payload.id] = {
           loading: true,
           code: "",
-          err: "",
+          error: "",
         };
         return state;
 
@@ -32,14 +35,15 @@ const reducer = produce(
         state[action.payload.id] = {
           loading: false,
           code: action.payload.bundle.code,
-          err: action.payload.bundle.err,
+          error: action.payload.bundle.err,
         };
         return state;
 
       default:
         return state;
     }
-  }
+  },
+  initialState
 );
 
 export default reducer;

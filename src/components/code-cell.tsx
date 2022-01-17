@@ -1,32 +1,27 @@
-import { useState, useEffect, FC } from "react";
+import { useEffect, FC } from "react";
 import CodeEditor from "./code-editor";
 import PreviewFrame from "./preview-frame";
 import ResizableFrame from "./resizable-frame";
-import bundle from "../bundler";
 import { Cell } from "../state";
 import { useActions } from "../hooks/use-actions";
+import { useTypedSelector } from "../hooks/use-typed-selector"; // pulls state out of store
 
 interface CodeCellProps {
   cell: Cell;
 }
 
 const CodeCell: FC<CodeCellProps> = ({ cell }) => {
-  // cell.content is the user input that we need to bundle in order to know what to load in for the code output
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
-
-  const { updateCell } = useActions();
+  const { updateCell, createBundle } = useActions();
+  const bundle = useTypedSelector((state) => state.bundles[cell.id]);
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       // bundles the typed code after 1.2 sec at a time
-      const output = await bundle(cell.content);
-      setCode(output.code);
-      setError(output.error);
+      createBundle(cell.id, cell.content);
     }, 1200);
 
     return () => clearTimeout(timer);
-  }, [cell.content]);
+  }, [cell.id, cell.content]);
 
   return (
     <ResizableFrame direction="vertical">
@@ -43,7 +38,9 @@ const CodeCell: FC<CodeCellProps> = ({ cell }) => {
             onChange={(value) => updateCell(cell.id, value)}
           />
         </ResizableFrame>
-        <PreviewFrame code={code} errorMessage={error} />
+        {bundle && (
+          <PreviewFrame code={bundle.code} errorMessage={bundle.error} />
+        )}
       </div>
     </ResizableFrame>
   );
