@@ -13,6 +13,7 @@ const http_proxy_middleware_1 = require("http-proxy-middleware");
 const cells_1 = require("./routes/cells");
 const serve = (port, filename, dir, useProxy) => {
     const app = (0, express_1.default)();
+    app.use((0, cells_1.createCellsRouter)(filename, dir));
     if (useProxy) {
         // allows proxy or copy of port 3000 (CRA) to intercept requests to 4005
         // when app is installed on users cpu, there will be no CRA server.
@@ -27,7 +28,6 @@ const serve = (port, filename, dir, useProxy) => {
         const pkgPath = require.resolve("local-client/build/index.html");
         app.use(express_1.default.static(path_1.default.dirname(pkgPath)));
     }
-    app.use((0, cells_1.createCellsRouter)(filename, dir));
     return new Promise((resolve, reject) => {
         app.listen(port, resolve).on("error", reject);
     });

@@ -13,6 +13,7 @@ export const serve = (
   useProxy: boolean
 ) => {
   const app = express();
+  app.use(createCellsRouter(filename, dir));
 
   if (useProxy) {
     // allows proxy or copy of port 3000 (CRA) to intercept requests to 4005
@@ -29,8 +30,6 @@ export const serve = (
     const pkgPath = require.resolve("local-client/build/index.html");
     app.use(express.static(path.dirname(pkgPath)));
   }
-
-  app.use(createCellsRouter(filename, dir));
 
   return new Promise<void>((resolve, reject) => {
     app.listen(port, resolve).on("error", reject);
