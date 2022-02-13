@@ -18,6 +18,7 @@ const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
 const createCellsRouter = (filename, dir) => {
     const router = express_1.default.Router();
+    router.use(express_1.default.json()); // body parsing middleware
     const fullPath = path_1.default.join(dir, filename);
     router.get("/cells", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //make sure cell storage file exists. if not, create default list
@@ -27,7 +28,13 @@ const createCellsRouter = (filename, dir) => {
             res.send(JSON.parse(result));
         }
         catch (error) {
-            throw error;
+            if (error.code === "ENOENT") {
+                yield promises_1.default.writeFile(fullPath, "[]", "utf-8");
+                res.send([]);
+            }
+            else {
+                throw error;
+            }
         }
         // parse list of cells from file
         // send list to browser

@@ -24,6 +24,28 @@ const randomIDGen = (): string => Math.random().toString(36).substring(2, 7);
 const reducer = produce(
   (state: CellState = initialState, action: Action): CellState => {
     switch (action.type) {
+      case ActionType.FETCH_CELLS:
+        state.loading = true;
+        state.error = null;
+        return state;
+
+      case ActionType.FETCH_CELLS_COMPLETE:
+        state.order = action.payload.map((cell) => cell.id); //returns every cell's id in original order
+        state.data = action.payload.reduce((acc, cell) => {
+          acc[cell.id] = cell;
+          return acc;
+        }, {} as CellState["data"]);
+        return state;
+
+      case ActionType.FETCH_CELLS_ERROR:
+        state.loading = false;
+        state.error = action.payload;
+        return state;
+
+      case ActionType.SAVE_CELLS_ERROR:
+        state.error = action.payload;
+        return state;
+
       case ActionType.MOVE_CELL:
         const { direction } = action.payload;
         const moveIndex = state.order.findIndex(
