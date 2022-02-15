@@ -1,5 +1,5 @@
 {
-  "name": "jscode-note",
+  "name": "notecellbook",
   "version": "1.0.0",
   "description": "",
   "publishConfig": {
@@ -17,13 +17,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@jscode-note/local-client": "^1.0.0"
+    "@notecellbook/local-client": "^1.0.0"
   },
   "devDependencies": {
-    "@jscode-note/local-api": "^1.0.0",
+    "@notecellbook/local-api": "^1.0.0",
     "@types/node": "^17.0.10",
     "commander": "^8.3.0",
     "esbuild": "0.8.26",
     "typescript": "^4.5.5"
-  }
+  },
+  "gitHead": "77d8231935d467dd7a17c9c0e0fd70cf9718a918"
 }

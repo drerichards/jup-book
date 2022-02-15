@@ -1,5 +1,5 @@
 {
-  "name": "@jscode-note/local-api",
+  "name": "@notecellbook/local-api",
   "version": "1.0.0",
   "description": "",
   "files": [
@@ -23,9 +23,10 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@jscode-note/local-client": "^1.0.0",
+    "@notecellbook/local-client": "^1.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "http-proxy-middleware": "^2.0.1"
-  }
+  },
+  "gitHead": "77d8231935d467dd7a17c9c0e0fd70cf9718a918"
 }
