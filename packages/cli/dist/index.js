@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // handles cli commands typed in terminal to serve a file of saved code editor cells on user's sys

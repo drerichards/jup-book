@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // handles cli commands typed in terminal to serve a file of saved code editor cells on user's sys
 import { program } from "commander";
 import { serveCommand } from "./commands/serve";
