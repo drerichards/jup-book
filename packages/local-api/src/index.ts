@@ -27,7 +27,9 @@ export const serve = (
       })
     );
   } else {
-    const pkgPath = require.resolve("local-client/build/index.html");
+    const pkgPath = require.resolve(
+      "@jscode-note/local-client/build/index.html"
+    );
     app.use(express.static(path.dirname(pkgPath)));
   }
 

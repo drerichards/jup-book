@@ -25,7 +25,7 @@ const serve = (port, filename, dir, useProxy) => {
         }));
     }
     else {
-        const pkgPath = require.resolve("local-client/build/index.html");
+        const pkgPath = require.resolve("@jscode-note/local-client/build/index.html");
         app.use(express_1.default.static(path_1.default.dirname(pkgPath)));
     }
     return new Promise((resolve, reject) => {

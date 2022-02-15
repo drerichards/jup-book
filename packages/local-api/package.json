@@ -1,5 +1,5 @@
 {
-  "name": "local-api",
+  "name": "@jscode-note/local-api",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -19,6 +19,6 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "http-proxy-middleware": "^2.0.1",
-    "local-client": "^0.1.0"
+    "@jscode-note/local-client": "^0.1.0"
   }
 }
