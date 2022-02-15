@@ -22,9 +22,11 @@ const createCellsRouter = (filename, dir) => {
     const fullPath = path_1.default.join(dir, filename);
     router.get("/cells", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //make sure cell storage file exists. if not, create default list
-        // read file
         try {
+            // read file
             const result = yield promises_1.default.readFile(fullPath, { encoding: "utf-8" });
+            // parse list of cells from file
+            // send list to browser
             res.send(JSON.parse(result));
         }
         catch (error) {
@@ -36,8 +38,6 @@ const createCellsRouter = (filename, dir) => {
                 throw error;
             }
         }
-        // parse list of cells from file
-        // send list to browser
     }));
     router.post("/cells", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { cells } = req.body;
